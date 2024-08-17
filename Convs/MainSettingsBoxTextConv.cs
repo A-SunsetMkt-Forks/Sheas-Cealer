@@ -11,13 +11,11 @@ internal class MainSettingsBoxTextConv : IMultiValueConverter
     {
         MainConst.SettingsMode? settingsMode = values[0] as MainConst.SettingsMode?;
         string? browserPath = values[1] as string;
-        string? upstreamUrl = values[2] as string;
-        string? extraArgs = values[3] as string;
+        string? extraArgs = values[2] as string;
 
         return settingsMode switch
         {
             MainConst.SettingsMode.BrowserPathMode => browserPath!,
-            MainConst.SettingsMode.UpstreamUrlMode => upstreamUrl!,
             MainConst.SettingsMode.ExtraArgsMode => extraArgs!,
             _ => throw new UnreachableException(),
         };

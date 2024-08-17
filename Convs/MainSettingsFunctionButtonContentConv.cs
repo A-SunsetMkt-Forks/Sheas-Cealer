@@ -15,7 +15,6 @@ internal class MainSettingsFunctionButtonContentConv : IValueConverter
         return settingsMode switch
         {
             MainConst.SettingsMode.BrowserPathMode => MainConst.SettingsFunctionButtonBrowserPathContent,
-            MainConst.SettingsMode.UpstreamUrlMode => MainConst.SettingsFunctionButtonUpstreamUrlContent,
             MainConst.SettingsMode.ExtraArgsMode => MainConst.SettingsFunctionButtonExtraArgsContent,
             _ => throw new UnreachableException()
         };

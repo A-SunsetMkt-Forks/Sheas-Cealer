@@ -5,9 +5,6 @@
     <Setting Name="BrowserPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="UpstreamUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="ExtraArgs" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

@@ -13,16 +13,11 @@ internal partial class MainPres : ObservableObject
     internal MainPres(string[] args)
     {
         int browserPathIndex = Array.FindIndex(args, arg => arg.Equals("-b", StringComparison.OrdinalIgnoreCase)) + 1;
-        int upstreamUrlIndex = Array.FindIndex(args, arg => arg.Equals("-u", StringComparison.OrdinalIgnoreCase)) + 1;
         int extraArgsIndex = Array.FindIndex(args, arg => arg.Equals("-e", StringComparison.OrdinalIgnoreCase)) + 1;
 
         BrowserPath = browserPathIndex == 0 || browserPathIndex == args.Length ?
             !string.IsNullOrWhiteSpace(Settings.Default.BrowserPath) ? Settings.Default.BrowserPath : string.Empty :
             args[browserPathIndex];
-
-        UpstreamUrl = upstreamUrlIndex == 0 || upstreamUrlIndex == args.Length ?
-            !string.IsNullOrWhiteSpace(Settings.Default.UpstreamUrl) ? Settings.Default.UpstreamUrl : MainConst.DefaultUpstreamUrl :
-            args[upstreamUrlIndex];
 
         ExtraArgs = extraArgsIndex == 0 || extraArgsIndex == args.Length ?
             !string.IsNullOrWhiteSpace(Settings.Default.ExtraArgs) ? Settings.Default.ExtraArgs : string.Empty :
@@ -50,17 +45,6 @@ internal partial class MainPres : ObservableObject
         if (File.Exists(value) && Path.GetFileName(value).ToLowerInvariant().EndsWith(".exe"))
         {
             Settings.Default.BrowserPath = value;
-            Settings.Default.Save();
-        }
-    }
-
-    [ObservableProperty]
-    private string upstreamUrl;
-    partial void OnUpstreamUrlChanged(string value)
-    {
-        if (MainConst.UpstreamUrlRegex().IsMatch(value))
-        {
-            Settings.Default.UpstreamUrl = value;
             Settings.Default.Save();
         }
     }

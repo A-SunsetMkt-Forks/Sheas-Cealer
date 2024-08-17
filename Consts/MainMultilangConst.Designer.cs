@@ -72,9 +72,9 @@ namespace Sheas_Cealer.Consts {
         /// <summary>
         ///   查找类似 The args cannot be recognized, check if the host contains syntax errors 的本地化字符串。
         /// </summary>
-        public static string _CealingHostErrorHint {
+        public static string _HostErrorHint {
             get {
-                return ResourceManager.GetString("_CealingHostErrorHint", resourceCulture);
+                return ResourceManager.GetString("_HostErrorHint", resourceCulture);
             }
         }
         
@@ -108,9 +108,9 @@ namespace Sheas_Cealer.Consts {
         /// <summary>
         ///   查找类似 Update successfully 的本地化字符串。
         /// </summary>
-        public static string _UpdateHostSuccessHint {
+        public static string _UpdateSubSuccessHint {
             get {
-                return ResourceManager.GetString("_UpdateHostSuccessHint", resourceCulture);
+                return ResourceManager.GetString("_UpdateSubSuccessHint", resourceCulture);
             }
         }
         
@@ -160,6 +160,24 @@ namespace Sheas_Cealer.Consts {
         }
         
         /// <summary>
+        ///   查找类似 Edit Sub 的本地化字符串。
+        /// </summary>
+        public static string EditSubButtonContent {
+            get {
+                return ResourceManager.GetString("EditSubButtonContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Click to edit sub 的本地化字符串。
+        /// </summary>
+        public static string EditSubButtonToolTip {
+            get {
+                return ResourceManager.GetString("EditSubButtonToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Extra Args 的本地化字符串。
         /// </summary>
         public static string ExtraArgsSettingsModeName {
@@ -187,15 +205,6 @@ namespace Sheas_Cealer.Consts {
         }
         
         /// <summary>
-        ///   查找类似 Fill in an upstream host URL 的本地化字符串。
-        /// </summary>
-        public static string SettingsBoxUpstreamUrlToolTip {
-            get {
-                return ResourceManager.GetString("SettingsBoxUpstreamUrlToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Browse Path 的本地化字符串。
         /// </summary>
         public static string SettingsFunctionButtonBrowserPathContent {
@@ -219,15 +228,6 @@ namespace Sheas_Cealer.Consts {
         public static string SettingsFunctionButtonToolTip {
             get {
                 return ResourceManager.GetString("SettingsFunctionButtonToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Reset URL 的本地化字符串。
-        /// </summary>
-        public static string SettingsFunctionButtonUpstreamUrlContent {
-            get {
-                return ResourceManager.GetString("SettingsFunctionButtonUpstreamUrlContent", resourceCulture);
             }
         }
         
@@ -295,29 +295,20 @@ namespace Sheas_Cealer.Consts {
         }
         
         /// <summary>
-        ///   查找类似 Update Host 的本地化字符串。
+        ///   查找类似 Update Sub 的本地化字符串。
         /// </summary>
-        public static string UpdateHostButtonContent {
+        public static string UpdateSubButtonContent {
             get {
-                return ResourceManager.GetString("UpdateHostButtonContent", resourceCulture);
+                return ResourceManager.GetString("UpdateSubButtonContent", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 Click to update host 的本地化字符串。
+        ///   查找类似 Click to update sub 的本地化字符串。
         /// </summary>
-        public static string UpdateHostButtonToolTip {
+        public static string UpdateSubButtonToolTip {
             get {
-                return ResourceManager.GetString("UpdateHostButtonToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Upstream URL 的本地化字符串。
-        /// </summary>
-        public static string UpstreamUrlSettingsModeName {
-            get {
-                return ResourceManager.GetString("UpstreamUrlSettingsModeName", resourceCulture);
+                return ResourceManager.GetString("UpdateSubButtonToolTip", resourceCulture);
             }
         }
     }

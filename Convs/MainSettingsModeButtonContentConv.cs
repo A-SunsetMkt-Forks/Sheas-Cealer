@@ -13,8 +13,7 @@ internal class MainSettingsModeButtonContentConv : IValueConverter
 
         return settingsMode switch
         {
-            MainConst.SettingsMode.BrowserPathMode => MainConst.UpstreamUrlSettingsModeName,
-            MainConst.SettingsMode.UpstreamUrlMode => MainConst.ExtraArgsSettingsModeName,
+            MainConst.SettingsMode.BrowserPathMode => MainConst.ExtraArgsSettingsModeName,
             MainConst.SettingsMode.ExtraArgsMode => MainConst.BrowserPathSettingsModeName,
             _ => throw new NotImplementedException()
         };

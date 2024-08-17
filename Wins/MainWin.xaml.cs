@@ -23,7 +23,7 @@ public partial class MainWin : Window
     private static MainPres? MainPres;
     private static readonly HttpClient MainClient = new();
     private static DispatcherTimer? HoldButtonTimer;
-    private static readonly FileSystemWatcher CealingHostWatcher = new(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Cealing-Host.json") { EnableRaisingEvents = true, NotifyFilter = NotifyFilters.LastWrite };
+    private static readonly FileSystemWatcher HostWatcher = new(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Cealing-Host.json") { EnableRaisingEvents = true, NotifyFilter = NotifyFilters.LastWrite };
     private static string CealArgs = string.Empty;
 
     internal MainWin(string[] args)
@@ -32,8 +32,8 @@ public partial class MainWin : Window
 
         DataContext = MainPres = new(args);
 
-        CealingHostWatcher.Changed += CealingHostWatcher_Changed;
-        CealingHostWatcher_Changed(null!, null!);
+        HostWatcher.Changed += HostWatcher_Changed;
+        HostWatcher_Changed(null!, null!);
     }
     protected override void OnSourceInitialized(EventArgs e) => IconRemover.RemoveIcon(this);
     private void MainWin_Loaded(object sender, RoutedEventArgs e) => SettingsBox.Focus();
@@ -57,9 +57,6 @@ public partial class MainWin : Window
             case MainConst.SettingsMode.BrowserPathMode:
                 MainPres.BrowserPath = SettingsBox.Text;
                 return;
-            case MainConst.SettingsMode.UpstreamUrlMode:
-                MainPres.UpstreamUrl = SettingsBox.Text;
-                return;
             case MainConst.SettingsMode.ExtraArgsMode:
                 MainPres.ExtraArgs = SettingsBox.Text;
                 return;
@@ -69,8 +66,7 @@ public partial class MainWin : Window
     {
         MainPres!.SettingsMode = MainPres.SettingsMode switch
         {
-            MainConst.SettingsMode.BrowserPathMode => MainConst.SettingsMode.UpstreamUrlMode,
-            MainConst.SettingsMode.UpstreamUrlMode => MainConst.SettingsMode.ExtraArgsMode,
+            MainConst.SettingsMode.BrowserPathMode => MainConst.SettingsMode.ExtraArgsMode,
             MainConst.SettingsMode.ExtraArgsMode => MainConst.SettingsMode.BrowserPathMode,
             _ => throw new UnreachableException()
         };
@@ -84,9 +80,6 @@ public partial class MainWin : Window
             case MainConst.SettingsMode.BrowserPathMode when browserPathDialog.ShowDialog().GetValueOrDefault():
                 SettingsBox.Focus();
                 MainPres.BrowserPath = browserPathDialog.FileName;
-                return;
-            case MainConst.SettingsMode.UpstreamUrlMode:
-                MainPres.UpstreamUrl = MainConst.DefaultUpstreamUrl;
                 return;
             case MainConst.SettingsMode.ExtraArgsMode:
                 MainPres.ExtraArgs = string.Empty;
@@ -110,7 +103,7 @@ public partial class MainWin : Window
         HoldButtonTimer!.Stop();
 
         if (string.IsNullOrWhiteSpace(CealArgs))
-            throw new Exception(MainConst._CealingHostErrorHint);
+            throw new Exception(MainConst._HostErrorHint);
         if (MessageBox.Show(MainConst._KillBrowserProcessesPrompt, string.Empty, MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             return;
 
@@ -128,19 +121,21 @@ public partial class MainWin : Window
         new CommandProc(sender == null).ShellRun(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, ($"{CealArgs} {MainPres!.ExtraArgs}").Trim());
     }
 
-    private void EditHostButton_Click(object sender, RoutedEventArgs e)
+    private void EditButton_Click(object sender, RoutedEventArgs e)
     {
-        string cealingHostPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Cealing-Host.json");
+        Button? senderButton = sender as Button;
 
-        if (!File.Exists(cealingHostPath))
-            File.Create(cealingHostPath).Dispose();
+        string filePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, senderButton == EditHostButton ? "Cealing-Host.json" : "Cealing-Sub.json");
 
-        ProcessStartInfo processStartInfo = new(cealingHostPath) { UseShellExecute = true };
+        if (!File.Exists(filePath))
+            File.Create(filePath).Dispose();
+
+        ProcessStartInfo processStartInfo = new(filePath) { UseShellExecute = true };
         Process.Start(processStartInfo);
     }
-    private async void UpdateHostButton_Click(object sender, RoutedEventArgs e)
+    private async void UpdateSubButton_Click(object sender, RoutedEventArgs e)
     {
-        string upstreamHostUrl = (MainPres!.UpstreamUrl.StartsWith("http://") || MainPres!.UpstreamUrl.StartsWith("https://") ? string.Empty : "https://") + MainPres!.UpstreamUrl;
+        string upstreamHostUrl = "";//(MainPres!.UpstreamUrl.StartsWith("http://") || MainPres!.UpstreamUrl.StartsWith("https://") ? string.Empty : "https://") +  MainPres!.UpstreamUrl;
         string upstreamHostString = await Http.GetAsync<string>(upstreamHostUrl, MainClient);
         string localHostPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Cealing-Host.json");
         string localHostString;
@@ -159,16 +154,16 @@ public partial class MainWin : Window
             if (overrideOptionResult == MessageBoxResult.Yes)
             {
                 File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "Cealing-Host.json"), upstreamHostString);
-                MessageBox.Show(MainConst._UpdateHostSuccessHint);
+                MessageBox.Show(MainConst._UpdateSubSuccessHint);
             }
             else if (overrideOptionResult == MessageBoxResult.No)
                 Process.Start(new ProcessStartInfo(upstreamHostUrl) { UseShellExecute = true });
         }
     }
-    private void ThemesButton_Click(object sender, RoutedEventArgs e) => MainPres!.IsLightTheme = MainPres.IsLightTheme.HasValue ? MainPres.IsLightTheme.Value ? null : true : false;
+    private void ThemesButton_Click(object sender, RoutedEventArgs e) => MainPres!.IsLightTheme = MainPres.IsLightTheme.HasValue ? MainPres.IsLightTheme.GetValueOrDefault() ? null : true : false;
     private void AboutButton_Click(object sender, RoutedEventArgs e) => new AboutWin().ShowDialog();
 
-    private void CealingHostWatcher_Changed(object sender, FileSystemEventArgs e)
+    private void HostWatcher_Changed(object sender, FileSystemEventArgs e)
     {
         try
         {

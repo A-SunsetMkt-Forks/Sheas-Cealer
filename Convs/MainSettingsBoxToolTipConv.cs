@@ -15,7 +15,6 @@ internal class MainSettingsBoxToolTipConv : IValueConverter
         return settingsMode switch
         {
             MainConst.SettingsMode.BrowserPathMode => MainConst.SettingsBoxBrowserPathToolTip,
-            MainConst.SettingsMode.UpstreamUrlMode => MainConst.SettingsBoxUpstreamUrlToolTip,
             MainConst.SettingsMode.ExtraArgsMode => MainConst.SettingsBoxExtraArgsToolTip,
             _ => throw new UnreachableException()
         };
